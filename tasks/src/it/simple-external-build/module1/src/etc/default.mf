@@ -1,0 +1,7 @@
+Specification-Title: Buildmagic
+Specification-Version: 2.0
+Specification-Vendor: JBoss, a Division of Red Hat, Inc (http://www.jboss.org)
+Implementation-Title: Buildmagic ()
+Implementation-Version: 2.0.2 (200812181629)
+Implementation-Vendor: JBoss, a Division of Red Hat, Inc
+Source-Repository-URL: http://anonsvn.jboss.org/repos/labs/labs/jbossbuild/buildmagic/tags/buildmagic-2.0.2

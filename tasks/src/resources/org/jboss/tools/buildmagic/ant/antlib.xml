@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<antlib>
+  
+  <!-- Glue Tasks -->
+  <taskdef name="resolveproperties" classname="org.jboss.tools.buildmagic.task.ResolveProperties"/>
+  <taskdef name="resolver" classname="org.jboss.tools.buildmagic.task.ResolveProperties"/>
+  <taskdef name="propertyfilter" classname="org.jboss.tools.buildmagic.task.PropertyFilter"/>
+  <taskdef name="require" classname="org.jboss.tools.buildmagic.task.Require"/>
+  <taskdef name="call" classname="org.jboss.tools.buildmagic.task.CallTarget"/>
+  <taskdef name="Ant" classname="org.jboss.tools.buildmagic.task.Ant"/>
+
+  <!-- Project/Module Tasks -->
+  <taskdef name="execmodules" classname="org.jboss.tools.buildmagic.task.module.ExecuteModules"/>
+  <taskdef name="projectinfo" classname="org.jboss.tools.buildmagic.task.module.ProjectInfo"/>
+  <taskdef name="moduleinfo" classname="org.jboss.tools.buildmagic.task.module.ModuleInfo"/>
+  <taskdef name="moduleconfig" classname="org.jboss.tools.buildmagic.task.module.ModuleConfig"/>
+  <taskdef name="moduleinit" classname="org.jboss.tools.buildmagic.task.module.ModuleInit"/>
+  
+  <!-- Configuration Helpers -->
+  <taskdef name="library" classname="org.jboss.tools.buildmagic.task.config.Library"/>
+  <taskdef name="modulelibrary" classname="org.jboss.tools.buildmagic.task.config.ModuleLibrary"/>
+  <taskdef name="libraryset" classname="org.jboss.tools.buildmagic.task.config.LibrarySet"/>
+
+  <!-- Misc -->
+  <taskdef name="projecthelp" classname="org.jboss.tools.buildmagic.task.ProjectHelp"/>
+  <taskdef name="_puke" classname="org.jboss.tools.buildmagic.task.util.Puke"/>
+  <taskdef name="_dump" classname="org.jboss.tools.buildmagic.task.util.Dump"/>
+
+</antlib>
+

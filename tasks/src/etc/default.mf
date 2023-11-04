@@ -1,0 +1,7 @@
+Specification-Title: @specification.title@
+Specification-Version: @version.major@.@version.minor@.@version.revision@
+Specification-Vendor: @specification.vendor@
+Implementation-Title: Buildmagic (@version.name@)
+Implementation-Version: @version.major@.@version.minor@.@version.revision@.@version.tag@ (@build.id@)
+Implementation-Vendor: @implementation.vendor@
+Source-Repository-URL: @source.repository.url@

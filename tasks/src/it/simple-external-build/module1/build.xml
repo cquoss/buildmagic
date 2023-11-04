@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project [
+  <!ENTITY buildmagic SYSTEM "../tools/buildmagic/etc/buildmagic.ent">
+  <!ENTITY tools      SYSTEM "../tools/buildmagic/etc/tools.ent">
+  <!ENTITY modules    SYSTEM "../tools/buildmagic/etc/modules.ent">
+  <!ENTITY defaults   SYSTEM "../tools/buildmagic/etc/defaults.ent">
+]>
+
+<!-- $Id$ -->
+
+<!--+======================================================================+-->
+<!--| JBoss (The OpenSource J2EE WebOS) Build File                         |-->
+<!--|                                                                      |-->
+<!--| Distributable under LGPL license.                                    |-->
+<!--| See terms of license at http://www.gnu.org.                          |-->
+<!--|                                                                      |-->
+<!--| This file has been designed to work with the 'tools' module and      |-->
+<!--| Buildmagic extentions.                                               |-->
+<!--+======================================================================+-->
+
+<project name="Buildmagic/Tasks" default="main">
+
+  <!--+====================================================================+-->
+  <!--| Setup                                                              |-->
+  <!--|                                                                    |-->
+  <!--| Include the common build elements.                                 |-->
+  <!--|                                                                    |-->
+  <!--| This defines several different targets, properties and paths.      |-->
+  <!--| It also sets up the basic extention tasks amoung other things.     |-->
+  <!--+====================================================================+-->
+
+  &buildmagic;
+  &defaults;
+  &tools;
+  
+  <target name="resolve-compile-dependencies" description="dependency placeholder">
+    <path id="library.classpath">
+    </path>
+  </target>
+  
+  <target name="resolve-test-dependencies" description="dependency placeholder">
+    <path id="test.dependencies.classpath">
+    </path>
+  </target>
+
+  <!--+====================================================================+-->
+  <!--| Initialization                                                     |-->
+  <!--|                                                                    |-->
+  <!--| Initialize the build system.  Other targets should depend on       |-->
+  <!--| 'init'.                                                            |-->
+  <!--+====================================================================+-->
+
+  <target name="init" depends="_buildmagic:init">
+    
+  </target>
+
+
+  <!--+====================================================================+-->
+  <!--| Configuration                                                      |-->
+  <!--|                                                                    |-->
+  <!--| This target is invoked by the Buildmagic initialization logic      |-->
+  <!--| and should contain module specific configuration elements.         |-->
+  <!--+====================================================================+-->
+
+  <target name="configure" unless="configure.disable">
+
+    <!-- Module name(s) & version -->
+    <property name="module.name" value="module1"/>
+    <property name="module.Name" value="Module1"/>
+    
+    <!--+================================+-->
+    <!--| Library & Module Dependencies. |-->
+    <!--+================================+-->
+    
+    <!-- Configure modules -->
+    <!--<path id="jboss.common.root" path="../common"/>
+    <property name="jboss.common.root" value="../common"/>-->
+
+    
+    <!--<call target="configure-modules"/>
+    <path id="dependentmodule.classpath">
+      <path refid="jboss.common.classpath"/>
+    </path>-->
+
+    <!--+=======================================+-->
+    <!--| Override any default properties here. |-->
+    <!--+=======================================+-->
+
+    <!-- We need the Ant RT classes -->
+    <property name="javac.include.ant.runtime" value="true"/>
+
+    <!-- Configure defaults & build tools -->
+    <call target="configure-defaults"/>
+    <call target="configure-tools"/>
+
+    <!--+=======================================+-->
+    <!--| Define module specific elements here. |-->
+    <!--+=======================================+-->
+
+  </target>
+
+
+  <!--+====================================================================+-->
+  <!--| Compile                                                            |-->
+  <!--|                                                                    |-->
+  <!--| This target should depend on other compile-* targets for each      |-->
+  <!--| different type of compile that needs to be performed, short of     |-->
+  <!--| documentation compiles.                                            |-->
+  <!--+====================================================================+-->
+
+  <target name="compile"
+	  description="Compile all source files."
+	  depends="resolve-compile-dependencies,
+                   _default:compile-classes,
+                   _default:compile-etc,
+                   _default:compile-resources">
+    <!-- Add module specific elements here. -->
+  </target>
+
+  <!--+====================================================================+-->
+  <!--| Test                                                               |-->
+  <!--|                                                                    |-->
+  <!--| Run unit tests                                                     |-->
+  <!--+====================================================================+-->
+
+  <target name="test"
+	  description="Run junit tests."
+	  depends="compile, resolve-test-dependencies">
+    
+    <mkdir dir="${build.test}"/>
+    <mkdir dir="${build.reports}"/>
+    
+    <javac srcdir="${source.test}"
+         destdir="${build.test}"
+         debug="on">
+      <classpath>
+        <pathelement location="${build.classes}"/>
+        <path refid="test.dependencies.classpath"/>
+      </classpath>
+    </javac>
+    
+    <junit printsummary="yes" haltonfailure="yes">
+      <classpath>
+        <pathelement location="${build.test}"/>
+        <pathelement location="${build.classes}"/>
+        <path refid="test.dependencies.classpath"/>
+      </classpath>
+
+      <formatter type="plain"/>
+
+      <!--<test name="my.test.TestCase" haltonfailure="no" outfile="result">
+        <formatter type="xml"/>
+      </test>-->
+
+      <batchtest fork="yes" todir="${build.reports}">
+        <fileset dir="${source.test}">
+          <include name="**/*Test*.java"/>
+          <exclude name="**/AllTests.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+
+
+  <!--+====================================================================+-->
+  <!--| Generate Output                                                    |-->
+  <!--|                                                                    |-->
+  <!--| Generates the target output for this module. Target output is      |-->
+  <!--| the output which is ment to be released or used by external        |-->
+  <!--| modules.                                                           |-->
+  <!--+====================================================================+-->
+
+  <target name="output"
+	  description="Generate all target output."
+	  depends="compile, test">
+
+    <mkdir dir="${build.lib}"/>
+
+    <!-- buildmagic-tasks.jar -->
+    <jar jarfile="${build.lib}/module1.jar" manifest="${build.etc}/default.mf">
+      <fileset dir="${build.classes}">
+        <include name="**"/>
+      </fileset>
+    </jar>
+    
+  </target>
+
+  <!--+====================================================================+-->
+  <!--| Misc.                                                              |-->
+  <!--|                                                                    |-->
+  <!--| Standard targets and psuedo-targets.                               |-->
+  <!--+====================================================================+-->
+
+  <target name="clean" depends="_buildmagic:clean">
+    <!-- Add module specific elements here. -->
+  </target>
+
+  <target name="clobber" depends="_buildmagic:clobber">
+    <!-- Add module specific elements here. -->
+  </target>
+
+  <!-- main, all, most and help are primary psuedo-targets -->
+  <target name="main" depends="most"/>
+  <target name="all"/>
+  <target name="most" depends="output"/>
+  <target name="help"/>
+
+</project>

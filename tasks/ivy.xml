@@ -1,0 +1,14 @@
+<ivy-module version="2.0" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+    <info organisation="jboss" module="tasks"/>
+    <configurations>
+      <conf name="compile"/>
+      <conf name="test" extends="compile"/>
+    </configurations>    
+    <dependencies defaultconf="compile" defaultconfmapping="*->default">
+        <dependency org="bsf" name="bsf" rev="2.4.0"/>
+        <dependency org="org.jboss" name="jboss-common-core" rev="2.2.10.GA"/>
+        <dependency org="junit" name="junit" rev="3.8.1" conf="test"/>
+    </dependencies>
+</ivy-module>

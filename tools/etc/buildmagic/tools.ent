@@ -1,0 +1,70 @@
+<!-- $Id$ -->
+
+
+<target name="configure-tools" unless="configure-tools.disable">
+
+  <call target="_configure:xdoclet:tasks" unless="_configure:xdoclet:tasks.done">
+    <available file="${xdoclet.xdoclet.lib}/xdoclet-${xdoclet.version}.jar"/>
+    <available file="${xdoclet.xdoclet.lib}/xdoclet-jmx-module-${xdoclet.version}.jar"/>
+  </call>
+
+  <call target="_configure:xdoclet:ejbdoclet" unless="_configure:xdoclet:ejbdoclet.done">
+    <available file="${xdoclet.xdoclet.lib}/xdoclet-${xdoclet.version}.jar"/>
+    <available file="${xdoclet.xdoclet.lib}/xdoclet-ejb-module-${xdoclet.version}.jar"/>
+    <available file="${jboss.plastic.lib}/jboss-j2ee.jar"/>
+  </call>
+
+  <call target="_configure:xdoclet:webdoclet" unless="_configure:xdoclet:webdoclet.done">
+    <available file="${xdoclet.xdoclet.lib}/xdoclet-${xdoclet.version}.jar"/>
+    <available file="${xdoclet.xdoclet.lib}/xdoclet-web-module-${xdoclet.version}.jar"/>
+    <available file="${sun.servlet.lib}/servlet.jar"/>
+  </call>
+
+</target>
+
+<!--<target name="_configure:xdoclet:tasks">
+
+  <path id="xdoclet.base.task.classpath">
+    <path refid="xdoclet.xdoclet.classpath"/>
+    <path refid="apache.log4j.classpath"/>
+    <path refid="apache.ant.classpath"/>
+  </path>
+
+  <taskdef name="jmxdoclet" 
+           classname="xdoclet.modules.jmx.JMXDocletTask"
+           classpathref="xdoclet.base.task.classpath"/>
+
+  <taskdef name="todo" 
+           classname="xdoclet.modules.doc.DocumentDocletTask"
+           classpathref="xdoclet.base.task.classpath"/>
+
+  <property name="_configure:xdoclet:tasks.done" value="true" system="true"/>
+
+</target>-->
+
+<target name="_configure:xdoclet:ejbdoclet">
+
+  <path id="ejbdoclet.task.classpath">
+    <path refid="xdoclet.base.task.classpath"/>
+    <path refid="jboss.plastic.classpath"/>
+  </path>
+
+  <taskdef name="ejbdoclet" 
+           classname="xdoclet.modules.ejb.EjbDocletTask"
+           classpathref="ejbdoclet.task.classpath"/>
+
+  <property name="_configure:xdoclet:ejbdoclet.done" value="true" system="true"/>
+</target>
+
+<target name="_configure:xdoclet:webdoclet">
+  <path id="webdoclet.task.classpath">
+    <path refid="xdoclet.base.task.classpath"/>
+    <path refid="sun.servlet.classpath"/>
+  </path>
+
+  <taskdef name="webdoclet" 
+   	   classname="xdoclet.modules.web.WebDocletTask"
+           classpathref="webdoclet.task.classpath"/>
+
+  <property name="_configure:xdoclet:webdoclet.done" value="true" system="true"/>
+</target>
